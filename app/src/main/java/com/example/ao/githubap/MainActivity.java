@@ -24,9 +24,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
+import javax.net.ssl.HttpsURLConnection;
 
 import static android.view.View.VISIBLE;
 
@@ -39,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         Log.i("HI", "GIT HUB APP START!");
-
+        Log.i("HI", getDataFromUrl());
         setContentView(R.layout.activity_main);
 
 
@@ -77,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     public void Onclickbtn(View view){
         Log.i("HI", "CLICED!");
 
+
         View list = findViewById(R.id.fragment_list);
         list.setVisibility(View.GONE);
         View proj = findViewById(R.id.fragment_man_projects);
@@ -85,7 +102,43 @@ public class MainActivity extends AppCompatActivity {
 
 ///////////////////////////////////////////////////////////////
 
+    String error = ""; // string field
+    private String getDataFromUrl() {
 
+        String result = null;
+        int resCode;
+        InputStream in;
+        try {
+            URL url = new URL("http://google.com");
+            URLConnection urlConn = url.openConnection();
+
+            HttpsURLConnection httpsConn = (HttpsURLConnection) urlConn;
+            httpsConn.setAllowUserInteraction(false);
+            httpsConn.setInstanceFollowRedirects(true);
+            httpsConn.setRequestMethod("GET");
+            httpsConn.connect();
+            resCode = httpsConn.getResponseCode();
+
+            if (resCode == HttpURLConnection.HTTP_OK) {
+                in = httpsConn.getInputStream();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        in, "iso-8859-1"), 8);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                in.close();
+                result = sb.toString();
+            } else {
+                error += resCode;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 ///////////////////////////////////////////////////////////////
 
