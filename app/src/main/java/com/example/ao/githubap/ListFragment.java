@@ -1,0 +1,19 @@
+package com.example.ao.githubap;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SearchView;
+
+
+public class ListFragment extends Fragment{
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.list_fragment, container, false);
+        setHasOptionsMenu(true);
+        return view;
+    }
+
+}
